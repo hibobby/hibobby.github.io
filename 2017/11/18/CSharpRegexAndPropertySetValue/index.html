@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://hibobby.github.io">
   <title>C#利用正则和反射给对象赋值 | HiBoBBy技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。 　　 什么是反射： 反射提供了封装程序集、模块和类型的对象（Type 类型）">
+  <meta name="description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。">
 <meta name="keywords" content="编程,C#,代码片段">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C#利用正则和反射给对象赋值">
 <meta property="og:url" content="http://hibobby.github.io/2017/11/18/CSharpRegexAndPropertySetValue/index.html">
 <meta property="og:site_name" content="HiBoBBy技术博客">
-<meta property="og:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。 　　 什么是反射： 反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调">
+<meta property="og:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://hibobby.github.io/assets/blogImg/csharpregex.png">
-<meta property="og:updated_time" content="2017-11-18T09:30:47.325Z">
+<meta property="og:updated_time" content="2017-11-18T09:34:18.860Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C#利用正则和反射给对象赋值">
-<meta name="twitter:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。 　　 什么是反射： 反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调">
+<meta name="twitter:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。">
 <meta name="twitter:image" content="http://hibobby.github.io/assets/blogImg/csharpregex.png">
   
     <link rel="alternative" href="/atom.xml" title="HiBoBBy技术博客" type="application/atom+xml">
@@ -173,8 +173,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。<br>　　<br>我们如果想利用凡是给一个对象属性赋值可以通过 <code>PropertyInfo.SetValue(object obj, object value)</code> 方式进行赋值。
-　　</p>
+        <p>如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。<br>　　<br>我们如果想利用凡是给一个对象属性赋值可以通过 <code>PropertyInfo.SetValue(object obj, object value)</code> 方式进行赋值。</p>
+<a id="more"></a>
+<p>　　</p>
 <h5 id="什么是反射："><a href="#什么是反射：" class="headerlink" title="什么是反射："></a>什么是反射：</h5><blockquote>
 <p>反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。如果代码中使用了属性，可以利用反射对它们进行访问。</p>
 <p>反射是.Net中获取运行时类型信息的方式，.Net的应用程序由：程序集(Assembly)、模块(Module)、类型(class)组成，而反射提供一种编程的方式，让程序员可以在程序运行期获得这几个组成部分的相关信息。</p>
@@ -454,6 +455,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">插件推荐</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">学习笔记</a>
               </li>
              
@@ -463,14 +472,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">插件推荐</a>
               </li>
             
             <div class="clearfix"></div>

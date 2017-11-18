@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://hibobby.github.io">
   <title>机器学习笔记 | HiBoBBy技术博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)神经">
+  <meta name="description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)">
 <meta name="keywords" content="学习笔记,机器学习,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习笔记">
 <meta property="og:url" content="http://hibobby.github.io/2017/04/10/MachineLearningNote/index.html">
 <meta property="og:site_name" content="HiBoBBy技术博客">
-<meta property="og:description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)神经网络是一种数学模型，是存在于计算机的神经系统，由大量的神经元相连接并进行计算，在">
+<meta property="og:description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-11-18T05:41:33.655Z">
+<meta property="og:updated_time" content="2017-11-18T09:35:03.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习笔记">
-<meta name="twitter:description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)神经网络是一种数学模型，是存在于计算机的神经系统，由大量的神经元相连接并进行计算，在">
+<meta name="twitter:description" content="记录下机器学习过程中的知识点，以便以后复习使用。 以下知识来自周莫烦老师的《有趣的机器学习》视频 机器学习分类： 监督学习 (有数据和标签) 非监督学习（只有数据没有标签） 半监督学习 （结合监督学习和非监督学习） 强化学习 （从经验中总结和提升） 遗传算法 （适者生存，不适者淘汰）  什么是神经网络 (机器学习)">
   
     <link rel="alternative" href="/atom.xml" title="HiBoBBy技术博客" type="application/atom+xml">
   
@@ -180,7 +180,8 @@
 <li>强化学习 （从经验中总结和提升）</li>
 <li>遗传算法 （适者生存，不适者淘汰）</li>
 </ol>
-<h5 id="什么是神经网络-机器学习"><a href="#什么是神经网络-机器学习" class="headerlink" title="什么是神经网络 (机器学习)"></a>什么是神经网络 (机器学习)</h5><p>神经网络是一种数学模型，是存在于计算机的神经系统，由大量的神经元相连接并进行计算，在外界信息的基础上，改变内部的结构，常用来对输入和输出间复杂的关系进行建模。</p>
+<h5 id="什么是神经网络-机器学习"><a href="#什么是神经网络-机器学习" class="headerlink" title="什么是神经网络 (机器学习)"></a>什么是神经网络 (机器学习)</h5><a id="more"></a>
+<p>神经网络是一种数学模型，是存在于计算机的神经系统，由大量的神经元相连接并进行计算，在外界信息的基础上，改变内部的结构，常用来对输入和输出间复杂的关系进行建模。</p>
 <p>神经网络由大量的节点和之间的联系构成，负责传递信息和加工信息，神经元也可以通过训练而被强化。</p>
 <p><strong>神经网络是如何被训练的</strong>，首先它需要很多数据。比如他要判断一张图片是不是猫。就要输入上千万张的带有标签的猫猫狗狗的图片，然后再训练上千万次。</p>
 <p>神经网络训练的结果有对的也有错的，如果是错误的结果，将被当做非常宝贵的经验，那么是如何从经验中学习的呢？就是对比正确答案和错误答案之间的区别，然后把这个区别反向的传递回去，对每个相应的神经元进行一点点的改变。那么下一次在训练的时候就可以用已经改进一点点的神经元去得到稍微准确一点的结果。</p>
@@ -458,6 +459,14 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">前端</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">插件推荐</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">学习笔记</a>
               </li>
              
@@ -467,14 +476,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">大数据</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">前端</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">插件推荐</a>
               </li>
             
             <div class="clearfix"></div>
