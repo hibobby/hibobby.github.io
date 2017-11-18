@@ -16,12 +16,12 @@
 <meta property="og:site_name" content="HiBoBBy技术博客">
 <meta property="og:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://hibobby.github.io/assets/blogImg/csharpregex.png">
-<meta property="og:updated_time" content="2017-11-18T09:34:18.860Z">
+<meta property="og:image" content="http://hibobby.github.io/assets/blogImg/csharpRegex.png">
+<meta property="og:updated_time" content="2017-11-18T09:41:26.877Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C#利用正则和反射给对象赋值">
 <meta name="twitter:description" content="如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。　　我们如果想利用凡是给一个对象属性赋值可以通过 PropertyInfo.SetValue(object obj, object value) 方式进行赋值。">
-<meta name="twitter:image" content="http://hibobby.github.io/assets/blogImg/csharpregex.png">
+<meta name="twitter:image" content="http://hibobby.github.io/assets/blogImg/csharpRegex.png">
   
     <link rel="alternative" href="/atom.xml" title="HiBoBBy技术博客" type="application/atom+xml">
   
@@ -194,7 +194,7 @@
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> rgCfg = <span class="string">"TOP:topVal\nRIGHT:rigthVal\nLEFT:leftVal\nDOWN:downVal\nWIDTH=1200\nHEIGHT=1300"</span>;</span><br></pre></td></tr></table></figure>
 <p>可以使用以下代码利用正则和反射给对象赋值：</p>
 <figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RegionConfig <span class="title">GetRegionConfig</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">string</span> rgCfg = <span class="string">"TOP:topVal\nRIGHT:rigthVal\nLEFT:leftVal\nDOWN:downVal\nWIDTH=1200\nHEIGHT=1300"</span>;</span><br><span class="line">    RegionConfig rConfig = <span class="keyword">new</span> RegionConfig();</span><br><span class="line"></span><br><span class="line">    Regex rgRCfg = <span class="keyword">new</span> Regex(<span class="string">@"(.+)[:=](.+)\n&#123;0,1&#125;"</span>);</span><br><span class="line">    MatchCollection mc = rgRCfg.Matches(rgCfg);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (Match m <span class="keyword">in</span> mc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">string</span> key = m.Groups[<span class="number">1</span>].ToString();</span><br><span class="line">        <span class="keyword">string</span> <span class="keyword">value</span> = m.Groups[<span class="number">2</span>].ToString();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 利用反射赋值</span></span><br><span class="line">        <span class="keyword">var</span> property = rConfig.GetType().GetProperty(key);</span><br><span class="line">        <span class="keyword">if</span> (property != <span class="literal">null</span>) property.SetValue(rConfig, <span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> rConfig;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果：<br><img src="/assets/blogImg/csharpregex.png" alt="运行结果"></p>
+<p>运行结果：<br><img src="/assets/blogImg/csharpRegex.png" alt="运行结果"></p>
 
       
 
@@ -443,6 +443,18 @@
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">学习笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">编程</a>
               </li>
              
@@ -460,18 +472,6 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">插件推荐</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">学习笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">机器学习</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">大数据</a>
               </li>
             
             <div class="clearfix"></div>
