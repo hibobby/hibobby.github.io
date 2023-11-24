@@ -6,7 +6,7 @@
   <link href="http://hibobby.github.io/atom.xml" rel="self"/>
   
   <link href="http://hibobby.github.io/"/>
-  <updated>2023-11-24T07:54:25.181Z</updated>
+  <updated>2023-11-24T08:06:27.046Z</updated>
   <id>http://hibobby.github.io/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>test</title>
+    <link href="http://hibobby.github.io/2023/11/24/test/"/>
+    <id>http://hibobby.github.io/2023/11/24/test/</id>
+    <published>2023-11-24T08:06:14.000Z</published>
+    <updated>2023-11-24T08:06:27.046Z</updated>
+    
+    <content type="html"><![CDATA[<p>测试部署</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;测试部署&lt;/p&gt;
+</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>C#利用正则和反射给对象赋值</title>
