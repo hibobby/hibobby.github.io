@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>HiBoBBy技术博客</title>
+  
+  
+  <link href="http://hibobby.github.io/atom.xml" rel="self"/>
+  
+  <link href="http://hibobby.github.io/"/>
+  <updated>2023-11-24T07:54:25.181Z</updated>
+  <id>http://hibobby.github.io/</id>
+  
+  <author>
+    <name>HiBobby</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>C#利用正则和反射给对象赋值</title>
+    <link href="http://hibobby.github.io/2017/11/18/CSharpRegexAndPropertySetValue/"/>
+    <id>http://hibobby.github.io/2017/11/18/CSharpRegexAndPropertySetValue/</id>
+    <published>2017-11-18T09:02:00.000Z</published>
+    <updated>2023-11-24T07:54:25.181Z</updated>
+    
+    <content type="html"><![CDATA[<p>如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。<br>　　<br>我们如果想利用凡是给一个对象属性赋值可以通过 <code>PropertyInfo.SetValue(object obj, object value)</code> 方式进行赋值。</p><span id="more"></span><p>　　</p><h5 id="什么是反射："><a href="#什么是反射：" class="headerlink" title="什么是反射："></a>什么是反射：</h5><blockquote><p>反射提供了封装程序集、模块和类型的对象（Type 类型）。可以使用反射动态创建类型的实例，将类型绑定到现有对象，或从现有对象获取类型并调用其方法或访问其字段和属性。如果代码中使用了属性，可以利用反射对它们进行访问。</p></blockquote><blockquote><p>反射是.Net中获取运行时类型信息的方式，.Net的应用程序由：程序集(Assembly)、模块(Module)、类型(class)组成，而反射提供一种编程的方式，让程序员可以在程序运行期获得这几个组成部分的相关信息。</p></blockquote><blockquote><p>Assembly类定义和加载程序集，获得正在运行的装配件信息，也可以动态的加载装配件，以及在装配件中查找类型信息，并创建该类型的实例。<br>Type类可以获得对象的类型信息，此信息包含对象的所有要素：方法、构造器、属性等等，通过Type类可以得到这些要素的信息，并且调用之。<br>Module了解包含模块的程序集以及模块中的类等，还可以获取在模块上定义的所有全局方法或其他特定的非全局方法。<br>ConstructorInfo了解构造函数的名称、参数、访问修饰符（如pulic 或private）和实现详细信息（如abstract或virtual）等。使用Type的GetConstructors或 GetConstructor方法来调用特定的构造函数。<br>MethodInfo了解方法的名称、返回类型、参数、访问修饰符（如pulic 或private）和实现详细信息（如abstract或virtual）等。使用Type的GetMethods或GetMethod方法来调用特定的方法。<br>PropertyInfo了解属性的名称、数据类型、声明类型、反射类型和只读或可写状态等，获取或设置属性值。<br>FiedInfo了解字段的名称、访问修饰符（如public或private）和实现详细信息（如static）等，并获取或设置字段值。<br>EventInfo了解事件的名称、事件处理程序数据类型、自定义属性、声明类型和反射类型等，添加或移除事件处理程序。<br>ParameterInfo了解参数的名称、数据类型、是输入参数还是输出参数，以及参数在方法签名中的位置等。<br>诸如此类，还有FieldInfo、EventInfo等等，这些类都包含在System.Reflection命名空间下。</p></blockquote><h5 id="反射的作用："><a href="#反射的作用：" class="headerlink" title="反射的作用："></a>反射的作用：</h5><blockquote><ol><li>可以使用反射动态地创建类型的实例，将类型绑定到现有对象，或从现有对象中获取类型</li><li>应用程序需要在运行时从某个特定的程序集中载入一个特定的类型，以便实现某个任务时可以用到反射。</li><li>反射主要应用与类库，这些类库需要知道一个类型的定义，以便提供更多的功能。</li></ol></blockquote><h5 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h5><p>假设我们有如下一个结构：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">RegionConfig</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> TOP &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> RIGHT &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> LEFT &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> DOWN &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> WIDTH &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="built_in">string</span> HEIGHT &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><p>想要从以下字符串中找到相应的元素给以上结构的属性赋值：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">string</span> rgCfg = <span class="string">&quot;TOP:topVal\nRIGHT:rigthVal\nLEFT:leftVal\nDOWN:downVal\nWIDTH=1200\nHEIGHT=1300&quot;</span>;</span><br></pre></td></tr></table></figure><p>可以使用以下代码利用正则和反射给对象赋值：</p><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RegionConfig <span class="title">GetRegionConfig</span>()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">string</span> rgCfg = <span class="string">&quot;TOP:topVal\nRIGHT:rigthVal\nLEFT:leftVal\nDOWN:downVal\nWIDTH=1200\nHEIGHT=1300&quot;</span>;</span><br><span class="line">    RegionConfig rConfig = <span class="keyword">new</span> RegionConfig();</span><br><span class="line"></span><br><span class="line">    Regex rgRCfg = <span class="keyword">new</span> Regex(<span class="string">@&quot;(.+)[:=](.+)\n&#123;0,1&#125;&quot;</span>);</span><br><span class="line">    MatchCollection mc = rgRCfg.Matches(rgCfg);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">foreach</span> (Match m <span class="keyword">in</span> mc)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">string</span> key = m.Groups[<span class="number">1</span>].ToString();</span><br><span class="line">        <span class="built_in">string</span> <span class="keyword">value</span> = m.Groups[<span class="number">2</span>].ToString();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 利用反射赋值</span></span><br><span class="line">        <span class="keyword">var</span> property = rConfig.GetType().GetProperty(key);</span><br><span class="line">        <span class="keyword">if</span> (property != <span class="literal">null</span>) property.SetValue(rConfig, <span class="keyword">value</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> rConfig;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>运行结果：<br><img src="/assets/blogImg/csharpRegex.png" alt="运行结果"></p>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;如果类中的成员过多，一个属性一个属性的赋值太过繁琐，C#中可以利用反射给对象赋值。&lt;br&gt;　　&lt;br&gt;我们如果想利用凡是给一个对象属性赋值可以通过 &lt;code&gt;PropertyInfo.SetValue(object obj, object value)&lt;/code&gt; 方式进行赋值。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="编程" scheme="http://hibobby.github.io/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+    <category term="C#" scheme="http://hibobby.github.io/tags/C/"/>
+    
+    <category term="代码片段" scheme="http://hibobby.github.io/tags/%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>机器学习笔记</title>
+    <link href="http://hibobby.github.io/2017/04/10/MachineLearningNote/"/>
+    <id>http://hibobby.github.io/2017/04/10/MachineLearningNote/</id>
+    <published>2017-04-10T09:15:25.000Z</published>
+    <updated>2023-11-24T07:54:25.182Z</updated>
+    
+    <content type="html"><![CDATA[<p>记录下机器学习过程中的知识点，以便以后复习使用。</p><p>以下知识来自<a href="https://www.youtube.com/playlist?list=PLXO45tsB95cIFm8Y8vMkNNPPXAtYXwKin">周莫烦老师的《有趣的机器学习》视频</a></p><h5 id="机器学习分类："><a href="#机器学习分类：" class="headerlink" title="机器学习分类："></a>机器学习分类：</h5><ol><li>监督学习 (有数据和标签)</li><li>非监督学习（只有数据没有标签）</li><li>半监督学习 （结合监督学习和非监督学习）</li><li>强化学习 （从经验中总结和提升）</li><li>遗传算法 （适者生存，不适者淘汰）</li></ol><h5 id="什么是神经网络-机器学习"><a href="#什么是神经网络-机器学习" class="headerlink" title="什么是神经网络 (机器学习)"></a>什么是神经网络 (机器学习)</h5><span id="more"></span><p>神经网络是一种数学模型，是存在于计算机的神经系统，由大量的神经元相连接并进行计算，在外界信息的基础上，改变内部的结构，常用来对输入和输出间复杂的关系进行建模。</p><p>神经网络由大量的节点和之间的联系构成，负责传递信息和加工信息，神经元也可以通过训练而被强化。</p><p><strong>神经网络是如何被训练的</strong>，首先它需要很多数据。比如他要判断一张图片是不是猫。就要输入上千万张的带有标签的猫猫狗狗的图片，然后再训练上千万次。</p><p>神经网络训练的结果有对的也有错的，如果是错误的结果，将被当做非常宝贵的经验，那么是如何从经验中学习的呢？就是对比正确答案和错误答案之间的区别，然后把这个区别反向的传递回去，对每个相应的神经元进行一点点的改变。那么下一次在训练的时候就可以用已经改进一点点的神经元去得到稍微准确一点的结果。</p><p>神经网络是如何训练的呢？每个神经元都有属于它的激活函数，用这些函数给计算机一个刺激行为。</p><h5 id="卷积神经网络的简单介绍"><a href="#卷积神经网络的简单介绍" class="headerlink" title="卷积神经网络的简单介绍"></a>卷积神经网络的简单介绍</h5><p>卷积神经网络是近些年逐步兴起的一种人工神经网络结构, 因为利用卷积神经网络在图像和语音识别方面能够给出更优预测结果, 这一种技术也被广泛的传播可应用. 卷积神经网络最常被应用的方面是计算机的图像识别, 不过因为不断地创新, 它也被应用在视频分析, 自然语言处理, 药物发现, 等等. 近期最火的 Alpha Go, 让计算机看懂围棋, 同样也是有运用到这门技术.</p><ul><li>Updated on 2017-04-10</li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;记录下机器学习过程中的知识点，以便以后复习使用。&lt;/p&gt;
+&lt;p&gt;以下知识来自&lt;a href=&quot;https://www.youtube.com/playlist?list=PLXO45tsB95cIFm8Y8vMkNNPPXAtYXwKin&quot;&gt;周莫烦老师的《有趣的机器学习》视频&lt;/a&gt;&lt;/p&gt;
+&lt;h5 id=&quot;机器学习分类：&quot;&gt;&lt;a href=&quot;#机器学习分类：&quot; class=&quot;headerlink&quot; title=&quot;机器学习分类：&quot;&gt;&lt;/a&gt;机器学习分类：&lt;/h5&gt;&lt;ol&gt;
+&lt;li&gt;监督学习 (有数据和标签)&lt;/li&gt;
+&lt;li&gt;非监督学习（只有数据没有标签）&lt;/li&gt;
+&lt;li&gt;半监督学习 （结合监督学习和非监督学习）&lt;/li&gt;
+&lt;li&gt;强化学习 （从经验中总结和提升）&lt;/li&gt;
+&lt;li&gt;遗传算法 （适者生存，不适者淘汰）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&quot;什么是神经网络-机器学习&quot;&gt;&lt;a href=&quot;#什么是神经网络-机器学习&quot; class=&quot;headerlink&quot; title=&quot;什么是神经网络 (机器学习)&quot;&gt;&lt;/a&gt;什么是神经网络 (机器学习)&lt;/h5&gt;</summary>
+    
+    
+    
+    
+    <category term="学习笔记" scheme="http://hibobby.github.io/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    <category term="机器学习" scheme="http://hibobby.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    <category term="大数据" scheme="http://hibobby.github.io/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2017年读书清单（持续更新)</title>
+    <link href="http://hibobby.github.io/2017/03/31/2017ReadedBookList/"/>
+    <id>http://hibobby.github.io/2017/03/31/2017ReadedBookList/</id>
+    <published>2017-03-31T11:23:00.000Z</published>
+    <updated>2023-11-24T07:54:25.181Z</updated>
+    
+    <content type="html"><![CDATA[<p>记录下2017年看过的书</p><h4 id="已读完"><a href="#已读完" class="headerlink" title="已读完"></a>已读完</h4><h5 id="2017-年-1-月"><a href="#2017-年-1-月" class="headerlink" title="2017 年 1 月"></a>2017 年 1 月</h5><ul><li><a href="https://book.douban.com/subject/26745943/">CSS揭秘</a><br>作者:  [希腊] Lea Verou<br><img src="/assets/blogImg/cssjiemi.jpg" alt="CSS揭秘"><span id="more"></span></li></ul><h5 id="2017-年-3-月"><a href="#2017-年-3-月" class="headerlink" title="2017 年 3 月"></a>2017 年 3 月</h5><ul><li><p><a href="https://book.douban.com/subject/6709783/">浪潮之巅</a><br>作者:  [美国] 吴军<br><img src="/assets/blogImg/langchao.jpg" alt="浪潮之巅"></p></li><li><p><a href="https://book.douban.com/subject/25862578/">解忧杂货店</a><br>作者: [日] 东野圭吾<br><img src="/assets/blogImg/jieyouzahuodian.jpg" alt="解忧杂货店"></p></li><li><p><a href="https://book.douban.com/subject/1201821/">梦的解析</a><br>作者:  [奥地利] 弗洛伊德 &#x2F; [奥地利] 西格蒙德·弗洛伊德<br><img src="/assets/blogImg/mengdejiexi.jpg" alt="梦的解析"></p></li><li><p><a href="https://book.douban.com/subject/3211779/">嫌疑人X的献身</a><br>作者: [日] 东野圭吾<br><img src="/assets/blogImg/xianyiren.jpg" alt="嫌疑人X的献身"><br><em>2017年3月31日读完</em></p></li></ul><h4 id="在读"><a href="#在读" class="headerlink" title="在读"></a>在读</h4><blockquote><p>计数：读完-5 在读-0 test</p></blockquote>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;记录下2017年看过的书&lt;/p&gt;
+&lt;h4 id=&quot;已读完&quot;&gt;&lt;a href=&quot;#已读完&quot; class=&quot;headerlink&quot; title=&quot;已读完&quot;&gt;&lt;/a&gt;已读完&lt;/h4&gt;&lt;h5 id=&quot;2017-年-1-月&quot;&gt;&lt;a href=&quot;#2017-年-1-月&quot; class=&quot;headerlink&quot; title=&quot;2017 年 1 月&quot;&gt;&lt;/a&gt;2017 年 1 月&lt;/h5&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://book.douban.com/subject/26745943/&quot;&gt;CSS揭秘&lt;/a&gt;&lt;br&gt;作者:  [希腊] Lea Verou&lt;br&gt;&lt;img src=&quot;/assets/blogImg/cssjiemi.jpg&quot; alt=&quot;CSS揭秘&quot;&gt;</summary>
+    
+    
+    
+    
+    <category term="读书" scheme="http://hibobby.github.io/tags/%E8%AF%BB%E4%B9%A6/"/>
+    
+    <category term="清单" scheme="http://hibobby.github.io/tags/%E6%B8%85%E5%8D%95/"/>
+    
+    <category term="备忘" scheme="http://hibobby.github.io/tags/%E5%A4%87%E5%BF%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>我使用的前端插件</title>
+    <link href="http://hibobby.github.io/2017/02/28/IUsedFrontendPlugin/"/>
+    <id>http://hibobby.github.io/2017/02/28/IUsedFrontendPlugin/</id>
+    <published>2017-02-28T03:16:25.000Z</published>
+    <updated>2023-11-24T07:54:25.182Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近的项目中使用了很多第三方插件，在此简单记录一下，本篇文章会长期更新。</p><p>有必要将一些优秀的插件推荐给大家，先挖个坑，以后有时间会找其中比较优秀的插件写一写深入解析的文章。</p><p>大家比较熟知的框架和插件，比如jQuery、bootstrap在此略过。</p><span id="more"></span><h5 id="saveSvgAsPng"><a href="#saveSvgAsPng" class="headerlink" title="saveSvgAsPng"></a>saveSvgAsPng</h5><p>github:<a href="https://github.com/exupero/saveSvgAsPng">saveSvgAsPng</a></p><p>saveSvgAsPng可以很方便的将网页中的**&lt;svg&gt;<strong>标签另存为</strong>.png<strong>格式的图片。saveSvgAsPng的原理是将svg的内容绘制到</strong>canvas<strong>中，让后将</strong>canvas<strong>的dataUrl绑定到一个</strong>&lt;a&gt;<strong>标签的href属性中，触发</strong>&lt;a&gt;**标签的的click事件下载图片。</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用方法：</span></span><br><span class="line"><span class="title function_">saveSvgAsPng</span>(<span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&quot;diagram&quot;</span>), <span class="string">&quot;diagram.png&quot;</span>);</span><br></pre></td></tr></table></figure><hr><h5 id="TableExport"><a href="#TableExport" class="headerlink" title="TableExport"></a>TableExport</h5><p>::TODO</p><h5 id="select2"><a href="#select2" class="headerlink" title="select2"></a>select2</h5><h5 id="toastr"><a href="#toastr" class="headerlink" title="toastr"></a>toastr</h5><h5 id="bootstrap-tasinput"><a href="#bootstrap-tasinput" class="headerlink" title="bootstrap-tasinput"></a>bootstrap-tasinput</h5><h5 id="fontawesome"><a href="#fontawesome" class="headerlink" title="fontawesome"></a>fontawesome</h5><h5 id="introjs"><a href="#introjs" class="headerlink" title="introjs"></a>introjs</h5>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;最近的项目中使用了很多第三方插件，在此简单记录一下，本篇文章会长期更新。&lt;/p&gt;
+&lt;p&gt;有必要将一些优秀的插件推荐给大家，先挖个坑，以后有时间会找其中比较优秀的插件写一写深入解析的文章。&lt;/p&gt;
+&lt;p&gt;大家比较熟知的框架和插件，比如jQuery、bootstrap在此略过。&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="前端" scheme="http://hibobby.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+    <category term="插件推荐" scheme="http://hibobby.github.io/tags/%E6%8F%92%E4%BB%B6%E6%8E%A8%E8%8D%90/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>新博客的第一篇文章</title>
+    <link href="http://hibobby.github.io/2017/02/22/MyFirstPost/"/>
+    <id>http://hibobby.github.io/2017/02/22/MyFirstPost/</id>
+    <published>2017-02-22T07:46:25.000Z</published>
+    <updated>2023-11-24T07:54:25.182Z</updated>
+    
+    <content type="html"><![CDATA[<p>欢迎来到我的博客，很多年前在WordPress上写过一些内容，但是现在所有的文章备份都找不到了，最近感觉还是需要在网上有个自己写东西的地方，把平时工作生活中的感受、学到的知识写进去和大家分享。</p><h3 id="为什么选择Hexo"><a href="#为什么选择Hexo" class="headerlink" title="为什么选择Hexo"></a>为什么选择Hexo</h3><h5 id="1-Markdown！"><a href="#1-Markdown！" class="headerlink" title="1. Markdown！"></a>1. Markdown！</h5><p>  之前学过md的语法，一直没有使用场景，用md写东西不用考虑过多排版方面的事情。</p><h5 id="2-免费"><a href="#2-免费" class="headerlink" title="2. 免费!"></a>2. 免费!</h5><p>  有了Github Page再也不用自己租用主机了。</p><h5 id="3-备份方便！"><a href="#3-备份方便！" class="headerlink" title="3. 备份方便！"></a>3. 备份方便！</h5><p>  之前的WordPress就是因为自己懒得备份、加上域名过期、主机过期导致写了多年的东西都找不到了，现在有了github的强力支持，不用担心文章丢失的问题。</p><span id="more"></span><h3 id="新博客会写些什么文章"><a href="#新博客会写些什么文章" class="headerlink" title="新博客会写些什么文章"></a>新博客会写些什么文章</h3><ul><li>前端</li><li>C#的一些技巧</li><li>大数据方面学习记录</li></ul><blockquote><p>其实这篇文章只是测试使用，希望早点熟悉Hexo，多写能给大家帮助的文章。</p></blockquote>]]></content>
+    
+    
+    <summary type="html">&lt;p&gt;欢迎来到我的博客，很多年前在WordPress上写过一些内容，但是现在所有的文章备份都找不到了，最近感觉还是需要在网上有个自己写东西的地方，把平时工作生活中的感受、学到的知识写进去和大家分享。&lt;/p&gt;
+&lt;h3 id=&quot;为什么选择Hexo&quot;&gt;&lt;a href=&quot;#为什么选择Hexo&quot; class=&quot;headerlink&quot; title=&quot;为什么选择Hexo&quot;&gt;&lt;/a&gt;为什么选择Hexo&lt;/h3&gt;&lt;h5 id=&quot;1-Markdown！&quot;&gt;&lt;a href=&quot;#1-Markdown！&quot; class=&quot;headerlink&quot; title=&quot;1. Markdown！&quot;&gt;&lt;/a&gt;1. Markdown！&lt;/h5&gt;&lt;p&gt;  之前学过md的语法，一直没有使用场景，用md写东西不用考虑过多排版方面的事情。&lt;/p&gt;
+&lt;h5 id=&quot;2-免费&quot;&gt;&lt;a href=&quot;#2-免费&quot; class=&quot;headerlink&quot; title=&quot;2. 免费!&quot;&gt;&lt;/a&gt;2. 免费!&lt;/h5&gt;&lt;p&gt;  有了Github Page再也不用自己租用主机了。&lt;/p&gt;
+&lt;h5 id=&quot;3-备份方便！&quot;&gt;&lt;a href=&quot;#3-备份方便！&quot; class=&quot;headerlink&quot; title=&quot;3. 备份方便！&quot;&gt;&lt;/a&gt;3. 备份方便！&lt;/h5&gt;&lt;p&gt;  之前的WordPress就是因为自己懒得备份、加上域名过期、主机过期导致写了多年的东西都找不到了，现在有了github的强力支持，不用担心文章丢失的问题。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+</feed>
